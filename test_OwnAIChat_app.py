@@ -77,7 +77,7 @@ with st.sidebar.form("my-url-upload-form", clear_on_submit=True):
     st.text_area("Enter comma separated URLs")
     submit_urls = st.form_submit_button("upload URLs")
     if submit_urls:
-        st.write("work In progress")
+        st.write(submit_urls)
         st.session_state[AUDIO_EVENT_TRIGGERED] = False
 
 
@@ -122,6 +122,7 @@ def process_uploaded_files(uploaded_files):
                 f.close()
                 os.unlink(f.name)
                 list_of_files_uploaded.append(file.name)
+    print("files uploaded\n")
 
 
 with st.sidebar.form("my-upload-form", clear_on_submit=True):
@@ -159,6 +160,7 @@ if submit_delete_data and files_to_delete is not None:
 def init_stream_lit():
     global reload_required
 
+    print("init_stream_lit entered and reload_required: ", reload_required)
     if reload_required:
         st.cache_resource.clear()
         reload_required = False
@@ -167,8 +169,11 @@ def init_stream_lit():
 
     simple_chat_tab, historical_tab = st.tabs([":blue[***AI Chat***]", ":black[***Session Chat History***]"])
     with simple_chat_tab:
-
+        # print("Entered : simple_chat_tab")
         st.text_input(":red[Your question ❓]", key='query', on_change=submit)
+
+        print("st.session_state[USER_QUESTION] after text: ", st.session_state[USER_QUESTION])
+        print("st.session_state[AUDIO_EVENT_TRIGGERED] : ", st.session_state[AUDIO_EVENT_TRIGGERED])
 
         st.session_state[AUDIO_INPUT] = audiorecorder("🎙️ speak", "🎙️ stop")
         if not st.session_state[AUDIO_EVENT_TRIGGERED]:
@@ -180,8 +185,10 @@ def init_stream_lit():
                 st.session_state[AUDIO_INPUT].export("audio.wav", format="wav"))
             if os.path.isfile("audio.wav"):
                 os.remove("audio.wav")
+        # if st.session_state[USER_QUESTION]== "Could not understand your audio, PLease try again !":
 
         st.session_state[AUDIO_INPUT] = ""
+        print("st.session_state[USER_QUESTION] after audio: ", st.session_state[USER_QUESTION])
 
         if st.session_state[USER_QUESTION]:
             with st.spinner('Please wait ...'):
@@ -192,7 +199,7 @@ def init_stream_lit():
                     if st.session_state[USER_QUESTION] == "Could not understand your audio, PLease try again !":
                         reponse_placeholder.write("🔥 :green[Own-AI : ]" f":green[st.session_state[USER_QUESTION]]")
                     else:
-                        question_placeholder.write(f":red[Q: {st.session_state[USER_QUESTION]}]")
+                        question_placeholder.write(f":red[Q: {st.session_state[USER_QUESTION] }]")
                         response = agent_executor.run(st.session_state[USER_QUESTION])
                         reponse_placeholder.write("🔥 :green[Own-AI : ]" f":green[{response}]")
 
@@ -202,6 +209,7 @@ def init_stream_lit():
 
                     st.session_state[QUESTION_HISTORY].append((st.session_state[USER_QUESTION], response))
                     st.session_state[USER_QUESTION] = ""
+                    print("st.session_state[USER_QUESTION] after append: ", st.session_state[USER_QUESTION])
 
                 except Exception as e:
                     st.error(f"Error occurred: {e}")
@@ -216,4 +224,5 @@ def init_stream_lit():
 
 
 if __name__ == "__main__":
+    print("main entered")
     init_stream_lit()

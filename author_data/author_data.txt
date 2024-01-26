@@ -1,8 +1,58 @@
-My personal Details
+Use this documet to know About this application author:
 
-Syam's elder son is Sri Jatin Devendla and younger son is Sri Anish Devendla and his wife is Yamini Devendla and every one of his family members born in India, Hyderabad.
-Syam birth palce is Polepalli, Donakonda.
-He is part of famous "Cool-Gang" friends group.
+A well-accomplished certified data analyst with more than 15 years of experience in C, C++, Scala, Python, Data
+Structures, BI, Big-data technologies (Hadoop, Spark, Hive, Spark SQL, Spark-Streaming, Kafka) and AWS.
+Experience includes maintaining large clusters end to end, data processing and implementation of complex data
+pipelines, testing of enterprise, mobile application, and middleware component software and seeking a challenging role
+in your reputed organization where IT skills will be fully utilized.
+• AI Skills: Streamlit, LangChain, OpenAI, HuggingFace, RAG, Speech to Text, Vector DB.
+
+Name: Syam Prasad Devendla
+Family memebers:
+    - elder son is Sri Jatin Devendla
+    - younger son is Sri Anish Devendla
+    - wife, Yamini Devendla
+    - Mother, Bhulakshmi
+    - Father, Venkateswarlu
+
+Core Competences
+• Hands-on experience of programming in Scala, python, C and C++.
+• Developed Bigdata applications using Scala, Hadoop, Spark, Spark-SQL, Kafka and Spark Streaming.
+• Hands-on experience of using data structures (List, Queue, Stack, Trees, Tuples, Hash map)
+• Worked on deploying and managing application on AWS cloud.
+• Hands-on experience of Bigdata modules debugging and fixing issues.
+• Experience in developing/managing Streamsets data pipelines end to end.
+• Worked on Big data technologies (Hadoop, Spark, Yarn Architecture, map-reduce, Chronos, Zookeeper, Sparkstreaming, Kafka, RDD, Hive) and good hands on of multi-threaded programming.
+• Git, GitHub, CI/CD pipelines, Jenkins, Docker, Kubernetes, Cloud Formation.
+• Business knowledge of Equities, Price-action, Futures and Options. Strong technical and chart analysis skills.
+• Experience of transitioning On-prem big data platforms to the Cloud
+
+Corporate-Awards
+• Oracle-Star: for breaking window hack (BI 11g – print issue for a user)
+• Samsung-Knight: fixed 108 memory leaks and found a bug which has impacted complete Tizen OS (C++ null
+check issue)
+
+TECHNICAL SKILLS
+Languages: C, Scala, C++ (Data Structures, STL), Python, SQL (Spark, Kafka)
+Cloud Technologies: Oracle cloud and AWS (IAM, S3, EC2, EBS, Cloud Watch, Cloud Trail, Route 53, Lambda, ELB,
+VPC, EMR, Athena, Cloud Front, EKS, Quick Sight)
+Dev-Ops: Git, Git-hub, Git-Lab, Docker, Kubernetes, Streamsets, Elastic Search.
+Big-Data Technologies: Hadoop, Spark, RDD, Kafka, Hive, Spark-Streaming, AKKA-Http.
+Mobile Platforms: SHP, Bada, Android, Linux, WindowsMobile5.0, SLP and Tizen
+Tools: Eclipse, VS2005, VS2010, KlocWork, SVN, git, Clear case, Perforce, Grafana, Control Center, IntelliJ
+
+EDUCATION
+• Post Graduate Diploma in Embedded Systems from CDAC Kochi in 2006
+• Bachelor of Technology in Electronics and Communications from Nagarjuna University in 2005
+
+WORK HISTORY
+Natwest Bank, UK, Sr Data Engineer Dec-2021 to till date.
+Lloyds Bank, UK, Data Engineer Sep-2021 to Dec-2021
+Oracle Pvt Ltd, India, Data Analytics Team Jan-2014 to Aug-2021
+Samsung R&D Operations, India, Multimedia Team Oct-2008 to Jan-2014
+
+
+
 
 
 

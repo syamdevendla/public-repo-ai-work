@@ -17,24 +17,9 @@ st.title("Own GenAI Chat🔥")
 
 QUESTION_HISTORY: str = 'question_history'
 USER_QUESTION: str = 'user_question'
-AUDIO_INPUT: audiorecorder = ""
-AUDIO_EVENT_TRIGGERED: bool = True
-
 list_of_files_uploaded = []
 reload_required = False
 is_speech_question = False
-
-if QUESTION_HISTORY not in st.session_state:
-    st.session_state[QUESTION_HISTORY] = []
-
-if USER_QUESTION not in st.session_state:
-    st.session_state[USER_QUESTION] = ""
-
-if AUDIO_INPUT not in st.session_state:
-    st.session_state[AUDIO_INPUT] = ""
-
-if AUDIO_EVENT_TRIGGERED not in st.session_state:
-    st.session_state[AUDIO_EVENT_TRIGGERED] = True
 
 
 @st.cache_resource()
@@ -45,7 +30,6 @@ def prepare_agent() -> AgentExecutor:
 def submit():
     st.session_state[USER_QUESTION] = st.session_state.query
     st.session_state.query = ''
-    st.session_state[AUDIO_EVENT_TRIGGERED] = False
 
 
 def intro_text():
@@ -73,14 +57,7 @@ def uri_validator(x):
         return False
 
 
-with st.sidebar.form("my-url-upload-form", clear_on_submit=True):
-    st.text_area("Enter comma separated URLs")
-    submit_urls = st.form_submit_button("upload URLs")
-    if submit_urls:
-        st.write("work In progress")
-        st.session_state[AUDIO_EVENT_TRIGGERED] = False
-
-
+# with st.sidebar.form("my-url-upload-form", clear_on_submit=True):
 #   input_url = st.sidebar.text_input("Enter comma separated URLs")
 #  submit_urls = st.form_submit_button("upload URLs")
 # if submit_urls and input_url is not None:
@@ -122,6 +99,7 @@ def process_uploaded_files(uploaded_files):
                 f.close()
                 os.unlink(f.name)
                 list_of_files_uploaded.append(file.name)
+    print("files uploaded\n")
 
 
 with st.sidebar.form("my-upload-form", clear_on_submit=True):
@@ -130,18 +108,15 @@ with st.sidebar.form("my-upload-form", clear_on_submit=True):
     submit_uploaded_files = st.form_submit_button("upload")
 
 if submit_uploaded_files and uploaded_files is not None:
-    st.session_state[AUDIO_EVENT_TRIGGERED] = False
     process_uploaded_files(uploaded_files)
-    if list_of_files_uploaded:
-        reload_required = True
-        st.sidebar.write("Uploaded files: ", list_of_files_uploaded)
+    reload_required = True
+    st.sidebar.write("Uploaded files: ", list_of_files_uploaded)
 
 with st.sidebar.form("my-delete-file-form", clear_on_submit=True):
     files_to_delete = os.listdir("data/")
     submit_delete_data = st.form_submit_button("Delete uploaded data")
 
 if submit_delete_data and files_to_delete is not None:
-    st.session_state[AUDIO_EVENT_TRIGGERED] = False
     for file in files_to_delete:
         if file != "author_data.txt":
             file_path = os.path.join("data/", file)
@@ -149,59 +124,68 @@ if submit_delete_data and files_to_delete is not None:
                 os.remove(file_path)
 
 
-# prompt = st.chat_input("Say something")
-# if prompt:
+#prompt = st.chat_input("Say something")
+#if prompt:
 #    st.write(f"User: {prompt}")
-#   with st.chat_message("user"):
-#      st.write("Hello 👋")
+ #   with st.chat_message("user"):
+  #      st.write("Hello 👋")
+
+
 
 
 def init_stream_lit():
     global reload_required
 
+    print("init_stream_lit entered and reload_required: ", reload_required)
     if reload_required:
         st.cache_resource.clear()
         reload_required = False
 
     agent_executor: AgentExecutor = prepare_agent()
 
+    if QUESTION_HISTORY not in st.session_state:
+        st.session_state[QUESTION_HISTORY] = []
+
     simple_chat_tab, historical_tab = st.tabs([":blue[***AI Chat***]", ":black[***Session Chat History***]"])
     with simple_chat_tab:
-
+        print("Entered : simple_chat_tab")
         st.text_input(":red[Your question ❓]", key='query', on_change=submit)
+        user_question = ''
+        if USER_QUESTION in st.session_state:
+            user_question = st.session_state[USER_QUESTION]
+            st.session_state[USER_QUESTION] = []
 
-        st.session_state[AUDIO_INPUT] = audiorecorder("🎙️ speak", "🎙️ stop")
-        if not st.session_state[AUDIO_EVENT_TRIGGERED]:
-            st.session_state[AUDIO_INPUT] = ""
-        st.session_state[AUDIO_EVENT_TRIGGERED] = True
+        audio_input = audiorecorder("🎙️ speak", "🎙️ stop")
 
-        if len(st.session_state[AUDIO_INPUT]) and not st.session_state[USER_QUESTION]:
-            st.session_state[USER_QUESTION] = speech_text.audio_to_text_Convertion(
-                st.session_state[AUDIO_INPUT].export("audio.wav", format="wav"))
-            if os.path.isfile("audio.wav"):
-                os.remove("audio.wav")
+        print("audiorecorder length: ", len(audio_input))
+        print("user_question: ", user_question)
 
-        st.session_state[AUDIO_INPUT] = ""
+        if len(audio_input) and not user_question:
+            user_question = speech_text.audio_to_text_Convertion(audio_input.export("audio.wav", format="wav"))
+            # if user_question == "Could not understand your audio, PLease try again !":
 
-        if st.session_state[USER_QUESTION]:
+
+
+
+        if user_question:
             with st.spinner('Please wait ...'):
                 try:
-                    question_placeholder = st.empty()
+
+                    st.write(f":red[Q: {user_question}]")
                     player_placeholder = st.empty()
                     reponse_placeholder = st.empty()
-                    if st.session_state[USER_QUESTION] == "Could not understand your audio, PLease try again !":
-                        reponse_placeholder.write("🔥 :green[Own-AI : ]" f":green[st.session_state[USER_QUESTION]]")
-                    else:
-                        question_placeholder.write(f":red[Q: {st.session_state[USER_QUESTION]}]")
-                        response = agent_executor.run(st.session_state[USER_QUESTION])
-                        reponse_placeholder.write("🔥 :green[Own-AI : ]" f":green[{response}]")
+                    response = agent_executor.run(user_question)
 
+                    reponse_placeholder.write("🔥 :green[Own-AI : ]" f":green[{response}]")
                     audioout_file = speech_text.output_text_to_speak(response)
                     player_placeholder.audio(audioout_file)
                     os.remove(audioout_file)
 
-                    st.session_state[QUESTION_HISTORY].append((st.session_state[USER_QUESTION], response))
-                    st.session_state[USER_QUESTION] = ""
+                    # if is_speech_question:
+                    # is_speech_question = False
+                    # out_file = speech_text.output_text_to_speak(response)
+
+                    st.session_state[QUESTION_HISTORY].append((user_question, response))
 
                 except Exception as e:
                     st.error(f"Error occurred: {e}")
@@ -216,4 +200,6 @@ def init_stream_lit():
 
 
 if __name__ == "__main__":
+    print("main entered")
     init_stream_lit()
+
